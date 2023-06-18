@@ -16,6 +16,10 @@ classifiers = [
 
 dependencies = [
   "numpy",
+  "scipy",
   "sklearn",
   "joblib"
 ]
+
+[tool.setuptools]
+py-modules = []
