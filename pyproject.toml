@@ -1,0 +1,21 @@
+[project]
+name = "nDGPemu"
+version = "0.0.1"
+description = "Emulator of the boost factor for the dark matter power spectrum in nDGP gravity models"
+readme = "README.rst"
+requires-python = ">=3.6"
+license = {file = "LICENSE.txt"}
+keywords = ["modified gravity", "cosmology", "nDGP", "Dark Matter", "Power spectrum"]
+authors = [
+  {name = "Bartolomeo Fiorini", email = "b.fiorini@qmul.ac.uk"},
+]
+classifiers = [
+  "Development Status :: Beta",
+  "Programming Language :: Python"
+]
+
+dependencies = [
+  "numpy",
+  "sklearn",
+  "joblib"
+]
