@@ -52,9 +52,10 @@ class BoostPredictor:
             H0rc: float; value of the nDGP parameter H_0*r_c
             z: float; redshift value.
             cosmo_params: dict of cosmological parameters keys and corresponding values. Must contain Om, ns, As, h, Ob.
-
+            k_out: 1D-array, defualt None; custom wavenumber array for which the boost factor is estimated.
+                   If None, the algorithm uses the training values of the wavenumber.
+               
         Output
-            k: 1D-array; wavenumber correspoding to the boost factor values
             Bk: 1D-array; boost factor values
         '''
         a = 1/(1+z)
