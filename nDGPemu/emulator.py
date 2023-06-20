@@ -2,11 +2,10 @@
 import joblib
 import pickle as pk
 import numpy as np
-import pathlib
+from pkg_resources import resource_stream
 import os
 from scipy.interpolate import InterpolatedUnivariateSpline
 
-package_path = os.fsdecode(pathlib.Path(os.path.dirname(__file__)).parent.absolute())
 
 # Bounds of the interpolation range
 input_bounds = {'H0rc':[0.2,20],
@@ -38,10 +37,10 @@ def rescale_param(cosmo_params,key):
 class BoostPredictor:
     def __init__(self):
         print ("Loading model and related data")
-        self.model = joblib.load(f'{package_path}/cache/nDGPemu_LC_k5_woSN_PCA3_z2.joblib')
-        self.table_mean = np.load(f'{package_path}/cache/TableMean.npy', allow_pickle=True)
-        self.k_vals = np.load(f'{package_path}/cache/k_vals.npy', allow_pickle=True)
-        with open(f'{package_path}/cache/pca.pkl','rb') as f:
+        self.model = joblib.load(resource_stream('nDGPemu','/cache/nDGPemu_LC_k5_woSN_PCA3_z2.joblib'))
+        self.table_mean = np.load(resource_stream('nDGPemu','/cache/TableMean.npy'), allow_pickle=True)
+        self.k_vals = np.load(resource_stream('nDGPemu','/cache/k_vals.npy'), allow_pickle=True)
+        with resource_stream('nDGPemu','/cache/pca.pkl') as f:
             self.pca = pk.load(f)
     
     def predict(self, H0rc, z, cosmo_params, k_out=None):
@@ -52,9 +51,10 @@ class BoostPredictor:
             H0rc: float; value of the nDGP parameter H_0*r_c
             z: float; redshift value.
             cosmo_params: dict of cosmological parameters keys and corresponding values. Must contain Om, ns, As, h, Ob.
-
+            k_out: 1D-array, defualt None; custom wavenumber array for which the boost factor is estimated.
+                   If None, the algorithm uses the training values of the wavenumber.
+               
         Output
-            k: 1D-array; wavenumber correspoding to the boost factor values
             Bk: 1D-array; boost factor values
         '''
         a = 1/(1+z)
