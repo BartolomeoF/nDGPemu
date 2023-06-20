@@ -20,6 +20,3 @@ dependencies = [
   "scikit-learn",
   "joblib"
 ]
-
-[tool.setuptools]
-py-modules = []
