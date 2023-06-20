@@ -5,7 +5,8 @@ Emulator of the boost factor for the dark matter power spectrum in nDGP gravity 
 It is recommended to install the package in a dedicated environment. The package requires:
 - numpy,
 - joblib,
-- sklearn.
+- scipy,
+- scikit-learn.
 
 To install the package, access the package directory from a terminal window and execute:
 
