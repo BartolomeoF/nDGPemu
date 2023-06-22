@@ -1,6 +1,6 @@
 [project]
 name = "nDGPemu"
-version = "0.0.1"
+version = "0.1.0"
 description = "Emulator of the boost factor for the dark matter power spectrum in nDGP gravity models"
 readme = "README.rst"
 requires-python = ">=3.6"
@@ -10,7 +10,7 @@ authors = [
   {name = "Bartolomeo Fiorini", email = "b.fiorini@qmul.ac.uk"},
 ]
 classifiers = [
-  "Development Status :: Beta",
+  "Development Status :: Production",
   "Programming Language :: Python"
 ]
 
