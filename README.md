@@ -27,7 +27,7 @@ The model can be used to predict the boost factor with the syntax
 
 where H0rc, z, cosmo_params are user defined paramters. 
 
-The emulator assumes a flat $\Lambda$CDM cosmology and neglets the energy density of radiation and neutrinos. The cosmological parameters required in the dictonary cosmo_params to obtain the nDGP boost factors and their allowed ranges are: 
+The emulator assumes a flat $\Lambda$-CDM cosmology and neglets the energy density of radiation and neutrinos. The cosmological parameters required in the dictonary cosmo_params to obtain the nDGP boost factors and their allowed ranges are: 
 - $\Omega_{\rm m} \in [0.28,0.36]$,
 - $\Omega_{\rm b} \in [0.04,0.06]$,
 - $n_{\rm s} \in [0.92,1]$,
