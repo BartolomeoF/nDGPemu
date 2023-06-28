@@ -33,6 +33,7 @@ The emulator assumes a flat $\Lambda$-CDM cosmology and neglets the energy densi
 - $n_{\rm s} \in [0.92,1]$,
 - $A_{\rm s} \in [1.7e-9,2.5e-9]$,
 - $h \in [0.61,0.73]$.
+
 Notice that the parameter $\Omega_{\rm m}$ accounts for the sum of CDM and baryonic matter. Also the modified gravity parameter H0rc and the redsfhit z are required and their interpolation ranges are:
 - $z \in [0,2]$,
 - $H_0 r_c \in [0.2,20]$.
