@@ -2,7 +2,7 @@
 Emulator of the boost factor for the dark matter power spectrum in nDGP gravity models
 
 # Installation
-It is recommended to install the package in a dedicated environment. The package requires:
+It is recommended to install the package in a dedicated python3 environment. The package requires:
 - numpy,
 - joblib,
 - scipy,
