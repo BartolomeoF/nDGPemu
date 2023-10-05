@@ -1,6 +1,6 @@
 [project]
 name = "nDGPemu"
-version = "0.1.1"
+version = "1.0.0"
 description = "Emulator of the boost factor for the dark matter power spectrum in nDGP gravity models"
 readme = "README.rst"
 requires-python = ">=3.6"
