@@ -81,7 +81,7 @@ class BoostPredictor:
         cosmo_list = [rescale_param(cosmo_params,key) for key in required_params]
         input_arr = np.concatenate([[Wrc], cosmo_list,[a]]).reshape(1, -1)
         raw_predics = self.model.predict(input_arr)[0]
-        predictions = 10**(-3*(self.pca.inverse_transform(raw_predics)+self.table_mean))+1
+        predictions = 10**(-3*(self.pca.inverse_transform(raw_predics)+self.table_mean))+0.999
         if k_out is not None:
             if ext==2:
                 if k_out.min()<self.k_vals.min() or k_out.max()>self.k_vals.max() :
