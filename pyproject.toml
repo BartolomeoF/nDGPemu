@@ -17,6 +17,4 @@ classifiers = [
 dependencies = [
   "numpy",
   "scipy",
-  "scikit-learn",
-  "joblib"
 ]

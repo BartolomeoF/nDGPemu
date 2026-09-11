@@ -1,5 +1,4 @@
-# Import required packages/functions --- The emulator requires sklearn installed ---
-import joblib
+# Import required packages/functions --- The emulator requires numpy and scipy only ---
 import pickle as pk
 import numpy as np
 from pkg_resources import resource_stream
@@ -18,6 +17,8 @@ input_bounds = {'H0rc':[0.2,20],
                 'z':[0,2]}
 
 required_params = ['Om', 'ns', 'As', 'h', 'Ob']
+
+id_fun = lambda x: x # naive identity function
 
 def rescale_param(cosmo_params,key):
     '''
@@ -40,12 +41,32 @@ def rescale_param(cosmo_params,key):
 class BoostPredictor:
     def __init__(self):
         print ("Loading model and related data")
-        self.model = joblib.load(resource_stream('nDGPemu','/cache/nDGPemu_LC_k5_woSN_PCA3_z2.joblib'))
+        with resource_stream('nDGPemu','/cache/weights.pkl') as f:
+            self.weights = pk.load(f)
+        # Hidden layers use a tanh activation; the output layer is linear (identity).
+        self.act_fun_list = [np.tanh, id_fun]
         self.table_mean = np.load(resource_stream('nDGPemu','/cache/TableMean.npy'), allow_pickle=True)
         self.k_vals = np.load(resource_stream('nDGPemu','/cache/k_vals.npy'), allow_pickle=True)
         with resource_stream('nDGPemu','/cache/pca.pkl') as f:
-            self.pca = pk.load(f)
-    
+            pca_data = pk.load(f)
+        self.pca_components = pca_data['components']
+        self.pca_mean = pca_data['mean']
+
+    def model(self, in_array):
+        n_layers = len(self.weights)//2
+        out_arr = in_array.copy()
+        for i in range(n_layers):
+            act_fun = self.act_fun_list[i]
+            out_arr = act_fun(np.einsum('i,ij->j', out_arr, self.weights[2*i])+self.weights[2*i+1])
+        return out_arr
+
+    def pca_inverse_transform(self, latent):
+        '''
+        Reimplements sklearn.decomposition.PCA.inverse_transform for a
+        whiten=False PCA:  X_pc @ components_ + mean_.
+        '''
+        return np.einsum('i,ij->j', latent, self.pca_components)+self.pca_mean
+
     def predict(self, H0rc, z, cosmo_params, k_out=None, ext=2):
         '''
         Computes the nDGP boost factor (P_nDGP/P_GR).
@@ -79,9 +100,9 @@ class BoostPredictor:
             missing_keys = [key for key in required_params if key not in cosmo_params]
             raise KeyError(f'The following keys are missing from the cosmo_params dictonary: {missing_keys}.')
         cosmo_list = [rescale_param(cosmo_params,key) for key in required_params]
-        input_arr = np.concatenate([[Wrc], cosmo_list,[a]]).reshape(1, -1)
-        raw_predics = self.model.predict(input_arr)[0]
-        predictions = 10**(-3*(self.pca.inverse_transform(raw_predics)+self.table_mean))+0.999
+        input_arr = np.concatenate([[Wrc], cosmo_list,[a]])
+        raw_predics = self.model(input_arr)
+        predictions = 10**(-3*(self.pca_inverse_transform(raw_predics)+self.table_mean))+0.999
         if k_out is not None:
             if ext==2:
                 if k_out.min()<self.k_vals.min() or k_out.max()>self.k_vals.max() :
@@ -90,4 +111,3 @@ class BoostPredictor:
             return InterpolatedUnivariateSpline(self.k_vals, predictions, ext=ext, k=1)(k_out)
         else:
             return predictions
-    
